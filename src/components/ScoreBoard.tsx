@@ -14,7 +14,7 @@ const ScoreBoard: React.FC<ScoreBoardProps> = ({ scores }) => {
     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
       <h2 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
         <Trophy className="h-5 w-5 text-yellow-500" />
-        Score Board
+        TIC TAC TOE - Score Board
       </h2>
       
       <div className="space-y-2">
