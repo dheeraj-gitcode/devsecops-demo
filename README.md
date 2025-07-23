@@ -88,3 +88,70 @@ yarn build
 
 The build artifacts will be stored in the `dist/` directory.
 
+🐳 4. Build and Run Docker Container Locally (Optional)
+
+```bash
+docker build -t tictactoe-demo:v1 .
+docker run -d -p 9090:80 tictactoe-demo:v1
+```
+
+☸️ 5. Create Kubernetes Cluster Using Kind
+
+```bash
+kind create cluster --name devsecops-demo
+```
+To verify:
+
+```bash
+kubectl cluster-info --context kind-devsecops-demo
+```
+📥 6. Deploy Argo CD into Kind Cluster
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+🌐 7. Access Argo CD UI
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+Access ArgoCD UI at: https://localhost:8080
+
+🔑 8. Login to Argo CD (Default)
+
+```bash
+kubectl get pods -n argocd
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+Username: admin
+Password: (from the above command)
+
+📌 9. Deploy the App via Argo CD
+Create an Argo CD app pointing to the GitHub repo (k8s manifest path).
+
+Configure imagePullSecrets if you're using GitHub Container Registry (GHCR).
+
+🔁 10. CI/CD Workflow with GitHub Actions
+On every push, the following jobs run:
+
+Unit Tests
+
+Linting
+
+Build
+
+Docker Build & Push (to GHCR)
+
+Vulnerability Scan (Trivy)
+
+Auto-update deployment.yaml with image tag
+
+Argo CD syncs updated deployment automatically
+
+🧹 Clean Up
+To delete the Kind cluster and all resources:
+
+```bash
+kind delete cluster --name devsecops-demo
+```
+
